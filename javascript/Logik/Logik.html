@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang='sk'>
+<head>
+    <title>Logik</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=Windows-1250'>
+
+    <style type="text/css">
+        body {
+            font-family: Arial;
+        }
+
+        .glyphicon {
+            font-size: 50px;
+        }
+
+        .colorBlack {
+            color: black;
+            border-radius: 5px;
+            border:2px solid black;
+        }
+
+        .colorYellow {
+            color: yellow;
+            border-radius: 5px;
+            border:2px solid yellow;
+        }
+
+        .colorRed {
+            color: red;
+            border-radius: 5px;
+            border:2px solid red;
+        }
+
+        .colorBlue {
+            color: blue;
+            border-radius: 5px;
+            border:2px solid blue;
+        }
+
+        .colorBrown {
+            color: brown;
+            border-radius: 5px;
+            border:2px solid brown;
+        }
+
+        .colorPink {
+            color: pink;
+            border-radius: 5px;
+            border:2px solid pink;
+        }
+
+        .colorGreen {
+            color: green;
+            border-radius: 5px;
+            border:2px solid green;
+        }
+
+        .colorGray {
+            color: gray;
+            border-radius: 5px;
+            border:2px solid gray;
+        }
+
+        .colorMatchOnly {
+            color:blue;
+        }
+
+        .colorAndPositionMatch {
+            color:black;
+        }
+
+        .drop {
+            font-size: 50px;
+            box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
+            -moz-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
+            -webkit-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
+        }
+
+        .table {
+            border-spacing: 15px;
+            border-collapse: separate;
+        }
+
+            /* override BootStrap */
+            .table > thead > tr > th {
+                border-bottom: 0px !important;
+            }
+
+            .table > tbody > tr > td {
+                border-top: 0px !important;
+            }
+
+        .draggable {
+            cursor: pointer;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/united/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+
+        var pawns = [
+          { class: "colorBlack" },
+          { class: "colorYellow" },
+          { class: "colorRed" },
+          { class: "colorBlue" },
+          { class: "colorBrown" },
+          { class: "colorPink" },
+          { class: "colorGreen" },
+          { class: "colorGray" }
+        ];
+
+        var userAddedRows = [];
+        var generatedRow = [];
+        var evaluation = [];
+        var pawnsTableContent = "";
+        var currentTurn = 0;
+        var maxTurns = 10;
+        var gameWon = false;
+        var gameLost = false;
+
+        function updateTable() {
+
+            // restore pawns
+            $("#pawns").html(pawnsTableContent);
+
+            // clear table
+            $("#tableBody").html("");
+
+            var columnCount = $("#columnCount").val();
+
+            for (var rowCounter = userAddedRows.length - 1; rowCounter >= 0 ; rowCounter--) {
+                var row = "";
+
+                if (userAddedRows[rowCounter].length > 0) {
+                    row = $('<tr>');
+                }
+
+                // render rows
+                for (var pawnCounter = 0; pawnCounter < userAddedRows[rowCounter].length; pawnCounter++) {
+                    var currentPawn = userAddedRows[rowCounter][pawnCounter];
+
+                    // -1 is empty space to place pawn
+                    if (currentPawn == -1) {
+
+                        var cell = $('<td />', {
+                            ondragover: "allowDrop(event)",
+                            ondrop: "drop(event)",
+                            class: "drop",
+                            id: "column" + pawnCounter
+                        }).append("&nbsp;");
+                    }
+                    else {
+                        var glyphicon = jQuery('<span />', {
+                            class: "glyphicon glyphicon-pawn " + pawns[currentPawn].class
+                        });
+
+                        var cell = $('<td>').append(glyphicon);
+                    }
+                    row.append(cell);
+                }
+
+                if (userAddedRows[rowCounter].length > 0) {
+                    var evaluationCell = $('<td />', {
+                        id: "eval" + rowCounter,
+                        style: "width:170px;"
+                    }).append(evaluation[rowCounter]);
+
+                    row.append(evaluationCell);
+                }
+
+                $("#tableBody").append(row);
+            }
+        }
+
+        function clearUserAddedRows() {
+            userAddedRows = [[], [], [], [], [], [], [], [], [], []];
+
+            // pre-fill first row with -1
+            addRow(0);
+        }
+
+        function addRow(index)
+        {
+            // pre-fill row with -1
+            var columnCount = $("#columnCount").val();
+            for (var counter = 0; counter < columnCount; counter++) {
+                userAddedRows[index][counter] = -1;
+            }
+        }
+
+        // generate pawns to guess
+        function generateRow() {
+
+            var columnCount = $("#columnCount").val();
+            for (var counter = 0; counter < columnCount; counter++) {
+
+                generatedRow[counter] = getRandomInt(0, 7);
+                for (var previous = 0; previous < counter; previous++) {
+                    if (generatedRow[counter] == generatedRow[previous]) {
+                        counter--; // get new random, if number is already present
+                    }
+                }
+            }
+        }
+
+        function isRowComplete()
+        {
+            if (userAddedRows[currentTurn].indexOf(-1) < 0) // if -1 is not present
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        function evaluateTurn()
+        {
+            var hits = 0;
+
+            var evaluationRow = "";
+
+            for (var counter = 0; counter < userAddedRows[currentTurn].length; counter++)
+            {
+                var currentPawn = Number(userAddedRows[currentTurn][counter]);
+
+                if (generatedRow.indexOf(currentPawn) > -1)
+                {
+                    if (generatedRow.indexOf(currentPawn) == counter)
+                    {
+                        // color and position match
+                        evaluationRow += '<span class="glyphicon glyphicon-ok colorAndPositionMatch"></span>';
+                        hits++;
+                    }
+                    else
+                    {
+                        // color match
+                        evaluationRow += '<span class="glyphicon glyphicon-ok colorMatchOnly"></span>';
+                    }
+                }
+            }
+            
+            evaluation[currentTurn] = evaluationRow + "&nbsp;";
+
+            var columnCount = $("#columnCount").val();
+            if (hits == columnCount)
+            {
+                gameWon = true;
+            }
+        }
+
+        function newTurn()
+        {
+            evaluateTurn();
+
+            currentTurn++;
+            if (currentTurn < maxTurns)
+            {
+                if (!gameWon)
+                {
+                    addRow(currentTurn);
+                    updateTable();
+                }
+                else
+                {
+                    alert("You have won the game!");
+                }
+            }
+            else
+            {
+                gameLost = true;
+                alert("Game over. Try again");
+            }
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // drag and drop functions
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var draggedPawnElementId = ev.dataTransfer.getData("text");
+            var draggedPawn = document.getElementById(draggedPawnElementId);
+
+            // return back pawn and add pawn to parent element if already placed in slot
+            if (ev.target.innerHTML != "&nbsp;")
+            {
+                // add new pawn into parent element
+                ev.target.parentElement.appendChild(draggedPawn);
+
+                var columnId = ev.target.parentElement.id.replace("column", "");
+
+                // move pawn back
+                document.getElementById(ev.target.id + "parent").appendChild(ev.target);
+            }
+            // add pawn if not already present
+            else
+            {
+                // add new pawn
+                ev.target.appendChild(draggedPawn);
+
+                var columnId = ev.target.id.replace("column", "");
+            }
+
+
+            // remember new position in userAddedRows table
+            var pawnId = draggedPawnElementId.replace("pawn", "");
+            userAddedRows[currentTurn][columnId] = pawnId;
+
+            if (isRowComplete())
+            {
+                newTurn();
+            }
+        }
+
+        $(document).ready(function () {
+            pawnsTableContent = $("#pawns").html();
+            generateRow();
+            clearUserAddedRows();
+            updateTable();
+        });
+
+    </script>
+</head>
+<body>
+    <br />
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1>LOGIK</h1>
+                <p>Drag pawns to the boxes. Black OK means one color and position is correct. Blue OK means one color is correct, but not placed correctly. Each color can be used only once per row.</p><br />
+                <div class="row">
+                    <div class="col-lg-2">
+                        Number of colors to guess:
+                    </div>
+                    <div class="col-lg-10">
+                        <select id="columnCount" onchange="generateRow(); clearUserAddedRows(); updateTable();">
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div><br /><br />
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-9">
+                        Game plan:
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="100px;"></th>
+                                    <th width="100px;"></th>
+                                    <th width="100px;"></th>
+                                    <th width="100px;"></th>
+                                    <th width="100px;"></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-3">
+                        Pawns:
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="100px;"></th>
+                                    <th width="100px;"></th>
+                                    <th width="100px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="pawns">
+                                <tr>
+                                    <td id="pawn0parent"><span id="pawn0" draggable="true" ondragstart="drag(event)" class="draggable glyphicon glyphicon-pawn colorBlack"></span></td>
+                                    <td id="pawn1parent"><span id="pawn1" draggable="true" ondragstart="drag(event)" class="draggable glyphicon glyphicon-pawn colorYellow"></span></td>
+                                    <td id="pawn2parent"><span id="pawn2" draggable="true" ondragstart="drag(event)" class="draggable glyphicon glyphicon-pawn colorRed"></span></td>
+                                </tr>
+                                <tr>
+                                    <td id="pawn3parent"><span id="pawn3" draggable="true" ondragstart="drag(event)" class="draggable glyphicon glyphicon-pawn colorBlue"></span></td>
+                                    <td id="pawn4parent"><span id="pawn4" draggable="true" ondragstart="drag(event)" class="draggable glyphicon glyphicon-pawn colorBrown"></span></td>
+                                    <td id="pawn5parent"><span id="pawn5" draggable="true" ondragstart="drag(event)" class="draggable glyphicon glyphicon-pawn colorPink"></span></td>
+                                </tr>
+                                <tr>
+                                    <td id="pawn7parent"><span id="pawn6" draggable="true" ondragstart="drag(event)" class="draggable glyphicon glyphicon-pawn colorGreen"></span></td>
+                                    <td id="pawn0parent"><span id="pawn7" draggable="true" ondragstart="drag(event)" class="draggable glyphicon glyphicon-pawn colorGray"></span></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
