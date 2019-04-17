@@ -1,0 +1,116 @@
+<html lang='en'>
+  <head>
+    <title>Penguins - ZOO</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=Windows-1250'>
+    <style type="text/css">
+      body { font-family: Arial; }
+      .mainTitle { text-align:center; font-size:100px; }
+      .container { float:left; width:100%; background-color:lightgray;}
+      .leftColumn { width:70%; height:80%; float:left; margin:3px; background-color:white; border:1px solid black; position:relative;}
+      .rightColumn { width:20%; float:left; margin:3px; background-color:ligntgray; }
+      .footer { clear:both; }
+      .subtitle { margin-top:20px; margin-left:20px; font-size:20px; }
+      .value { height:50px; border:1px solid black; padding:3px; background-color:white; } 
+      .valuebig { height:100px; border:1px solid black; padding:3px; background-color:white; } 
+    </style>
+    <script type="text/javascript">
+      function feed(e)
+      {
+        if ((e.which == 13) && (document.getElementById('elmFishCount').value != ''))
+        {
+          fishCount = parseInt(document.getElementById('elmFishCount').value);
+          if ((fishCount < 0) || (fishCount > previousFishCount))
+            alert('You do not have enough fish.');
+          else
+          {
+            statusMessage = '';
+            if (penguinsCount > fishCount)
+            {
+              penguinsCount = fishCount;
+              statusMessage = 'You have given insufficient fish to penguins. Some penguins had to be moved to another ZOO, since they were hungry.';
+            }
+            else if (penguinsCount < fishCount)
+            {
+              if (Math.floor((fishCount - penguinsCount) / 2) < penguinsCount) {
+                penguinsCount = penguinsCount + Math.floor((fishCount - penguinsCount) / 2);
+              }
+              else
+              {
+                penguinsCount = penguinsCount * 2;
+              }
+              statusMessage = 'You have given excess fish to penguins. Additional penguins have been born.';
+
+              if (penguinsCount > 99)
+                gameover();
+            }
+            else if (penguinsCount == fishCount)
+            {
+              statusMessage = 'You have given just enough food to penguins.';
+            }
+
+            statusMessage += ' You had ' + previousFishCount + ' fish and you have given ' + fishCount + ' fish to penguins. ' + (previousFishCount - fishCount) + ' fish remained, ';
+            previousFishCount = (previousFishCount - fishCount) * 2;
+            statusMessage += 'which have reproduced to ' + previousFishCount + ' fish. ';
+
+            document.getElementById('elmFishCount').value = '';
+            refresh();
+          }
+        }
+      }
+      function gameover()
+      {
+        statusMessage = 'Congratulations, you have won the game! You have more than 100 penguins.';
+        refresh();
+        document.getElementById('controlpanel').style.display = 'none';
+      }
+
+      function refresh()
+      {
+        document.getElementById('elmFish').innerHTML = 'You have ' + previousFishCount + ' fish.';
+        document.getElementById('elmPenguins').innerHTML = 'You have ' + penguinsCount + ' penguins.';
+        document.getElementById('elmStatusMessage').innerHTML = statusMessage;
+
+        zooInnerHtml = '';
+
+        var zooWidth = document.getElementById('zoo').offsetWidth - 70;
+        var zooHeight = document.getElementById('zoo').offsetHeight - 81;
+
+        for (var i = 0; i < penguinsCount; i++)
+        {
+          positionX = Math.floor((Math.random() * zooWidth) + 10);
+          positionY = Math.floor((Math.random() * zooHeight) + 10); 
+          zooInnerHtml += '<DIV style="position:absolute; left:' + positionX + 'px; top:' + positionY + 'px;"><IMG src="Penguin.jpg"></DIV>';
+        }
+
+        document.getElementById('zoo').innerHTML = zooInnerHtml;
+      }
+      onload = function()
+      {
+        previousFishCount = 18;
+        penguinsCount = 3;
+        statusMessage = 'Game has started.';
+        refresh();
+      }
+    </script>
+  </head>
+  <body>
+    <div class='mainTitle'>Penguin's ZOO</div>
+    <div class='container'>
+      <div class='leftColumn' id='zoo'>
+      </div>
+      <div class='rightColumn'>
+        <div class='subtitle'>Fish</div>
+        <div class='value' id='elmFish'>&nbsp;</div>
+        <div class='subtitle'>Penguins</div>
+        <div class='value' id='elmPenguins'>&nbsp;</div>
+        <div class='subtitle' id='controlpanel'>
+          How many fish do you want to give to penguins?<br />
+          <input type='text' id='elmFishCount' maxlength='3' size='3' onkeyup = 'feed(event);'></div>
+        <div class='subtitle'>What happened in ZOO</div>
+        <div class='valuebig' id='elmStatusMessage'>&nbsp;</div>
+      </div>
+      <div class='footer'>
+      </div>
+    </div>
+  </body>
+</html>
