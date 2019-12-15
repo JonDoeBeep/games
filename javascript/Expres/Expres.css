@@ -4,8 +4,8 @@ html,body {
 }
 
 svg {
-  height: 2000px;
-  width: 1500px;
+  height: 1600px;
+  width: 2400px;
   overflow: scroll;
 }
 
@@ -18,7 +18,7 @@ svg {
 }
 
 #grid {
-  height: 2000px;
-  width: 3000px; 
+  height: 1600px;
+  width: 2400px; 
 }
 

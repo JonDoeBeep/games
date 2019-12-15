@@ -5,10 +5,12 @@ const gridClickDrag = {
     const dragSensitivity = 8;
 
     // max / min values for area accessible by dragging
-    const minX = -1900;
-    const minY = -1000;
-    const maxX = 100;
-    const maxY = 100;
+    const minX = -30 - 44 * gridMap.rawMap.length + elmnt.parentElement.clientWidth;
+    const minY = -30 - 50 * gridMap.rawMap[0].length + elmnt.parentElement.clientHeight;
+    const maxX = -30;
+    const maxY = -30;
+    elmnt.style.marginTop = maxY + "px";
+    elmnt.style.marginLeft = maxX + "px";
 
     var posX = 0, posY = 0, deltaX = 0, deltaY = 0, totalX = 0; totalY = 0;
     elmnt.onmousedown = dragMouseDown;
