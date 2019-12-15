@@ -1,0 +1,24 @@
+html,body {
+  height: 100%;
+  overflow: hidden;
+}
+
+svg {
+  height: 2000px;
+  width: 1500px;
+  overflow: scroll;
+}
+
+#gridParent {
+  margin: 25px auto;
+  border: 1px dotted black;
+  overflow: hidden;
+  height: 80%;
+  width: 80%; 
+}
+
+#grid {
+  height: 2000px;
+  width: 3000px; 
+}
+
