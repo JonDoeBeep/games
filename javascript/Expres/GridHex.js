@@ -3,7 +3,7 @@ const gridHex = {
   factory: null,
   initializeHex: function(hexSize) {
     gridHex.factory = Honeycomb.extendHex({
-      size: 30,
+      size: hexSize,
       orientation: 'flat',
       background_color: null,
       render(draw) {

@@ -6,6 +6,7 @@ window.onload = function() {
   grid.initializeDrawing();
   gridHex.initializeHex(30);
   grid.initializeGrid();
+  grid.initializeRivers();
   gridClickDrag.initializeGridDrag(gridParent);
   gridZoom.initializeGridZoom(gridParent);  
 }
