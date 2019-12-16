@@ -74,7 +74,7 @@ const mouseEvent = {
       }
 
       // redraw grid, reinitialize mouse event(s)
-      document.getElementById('grid').innerHTML = "";
+      gridParent.innerHTML = "";
       grid.drawing = SVG(gridParent);
       grid.initializeGrid();
       mouseEvent.initializeDrag(gridParent);

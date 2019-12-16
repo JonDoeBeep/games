@@ -7,7 +7,7 @@ svg {
   overflow: scroll;
 }
 
-#gridParent {
+#gridContainer {
   margin: 25px auto;
   border: 1px dotted black;
   overflow: hidden;

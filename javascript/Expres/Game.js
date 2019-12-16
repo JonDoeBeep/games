@@ -1,5 +1,5 @@
 window.onload = function() {
-  gridParent = document.getElementById("grid");
+  gridParent = document.getElementById("gridParent");
 
   // initialize hex for grid factory method
   hex.initializeHex(30);
