@@ -30,6 +30,10 @@ const grid = {
     maxY = -hex.size;
     gridParent.style.marginTop = maxY + "px";
     gridParent.style.marginLeft = maxX + "px";
+    document.getElementById('grid').clientHeight = bottomRightCoords.y + "px";
+    document.getElementById('grid').clientWidth = bottomRightCoords.x + "px";
+    grid.drawing.node.setAttribute("height", (bottomRightCoords.y + hex.size) + "px");
+    grid.drawing.node.setAttribute("width", (bottomRightCoords.x + hex.size) + "px");
   },
 
   drawRiverSegment: function(segment) {

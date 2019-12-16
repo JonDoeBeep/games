@@ -6,6 +6,7 @@ window.onload = function() {
 
   // initialize grid
   grid.drawing = SVG(gridParent);
+  
   grid.initializeGrid();
 
   // initialize event listeners
