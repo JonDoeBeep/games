@@ -1,11 +1,11 @@
-const gridClickDrag = {
+const mouseEvent = {
 
-  initializeGridDrag: function(elmnt) {
+  initializeDrag: function(elmnt) {
     // how many pixels difference is a click, not a drag
     const dragSensitivity = 8;
 
     // max / min values for area accessible by dragging
-    const bottomRightCoords = grid.instance.get([gridMap.terrain.length - 1, gridMap.terrain[0].length - 1]).toPoint();
+    const bottomRightCoords = grid.instance.get([map.terrain.length - 1, map.terrain[0].length - 1]).toPoint();
     const minX = -30 - bottomRightCoords.x + elmnt.parentElement.clientWidth;
     const minY = -30 - bottomRightCoords.y + elmnt.parentElement.clientHeight;
     const maxX = -30;
@@ -59,7 +59,6 @@ const gridClickDrag = {
         var offsetX = e.pageX - gridParent.offsetLeft;
         var offsetY = e.pageY - gridParent.offsetTop;
         const hexCoordinates = grid.factory.pointToHex([offsetX, offsetY])
-        console.log(hexCoordinates)
         const hex = grid.instance.get(hexCoordinates)
 
         if (hex) {
@@ -69,6 +68,22 @@ const gridClickDrag = {
 
       totalX = 0;
       totalY = 0;
+    }
+  },
+
+  initializeZoom: function(elmnt) {
+
+    elmnt.onwheel = zoomGrid;
+
+    function zoomGrid(e) {
+      e = e || window.event;
+      e.preventDefault();
+      if (hex.size + e.deltaY > 0) {
+        hex.initializeHex(hex.size + e.deltaY);
+      }
+      document.getElementById('grid').innerHTML = "";
+      grid.drawing = SVG(gridParent);
+      grid.initializeGrid();
     }
   }
 }

@@ -1,4 +1,4 @@
-const gridMap = {
+const map = {
 
   terrain: ["oooooooooooooooooooooooooooooo",
             "oooooooooooooooooooooooooooooo", 
@@ -8,7 +8,7 @@ const gridMap = {
             "ooo   m  mmmmm  mooooooooooooo",
             "xxmmmmm       mmm oooooooooooo",
             "xx  m mm  m   m m  ooooooooooo",
-            "xx    mmm m  m  mmmxxooooooooo",
+            "xx    mmm m  m   mmmxxoooooooo",
             "xxm  m         m   xxxxoxooooo",
             "xxmmmm         mm   xooxxxoooo",
             "xxmmmm       mmmm   xxooxxoooo",
@@ -55,51 +55,44 @@ const gridMap = {
   // segment IDs: 0 = southeastern line, 1 = southern, 2 = southwestern, 3 = northwestern, 4 = northern, 5 = northeastern
 
   riverSegments: [
-
     // Columbia
-    {x: 4, y: 4, id: 1},
-    {x: 5, y: 4, id: 2},
-    {x: 5, y: 4, id: 1},
-    {x: 6, y: 5, id: 2},
-    {x: 6, y: 5, id: 1},
-    {x: 6, y: 5, id: 0},
-    {x: 7, y: 4, id: 1},
-    {x: 7, y: 4, id: 0},
-    {x: 7, y: 4, id: 5},
-    {x: 7, y: 4, id: 4},
-    {x: 7, y: 3, id: 2},
-    {x: 7, y: 3, id: 3},
-    {x: 7, y: 3, id: 4},
-    {x: 8, y: 3, id: 3},
-    {x: 8, y: 3, id: 4},
+    {x: 4, y: 4, id: 1}, {x: 5, y: 4, id: 2}, {x: 5, y: 4, id: 1}, {x: 6, y: 5, id: 2}, {x: 6, y: 5, id: 1},
+    {x: 6, y: 5, id: 0}, {x: 7, y: 4, id: 1}, {x: 7, y: 4, id: 0}, {x: 7, y: 4, id: 5}, {x: 7, y: 4, id: 4},
+    {x: 7, y: 3, id: 2}, {x: 7, y: 3, id: 3}, {x: 7, y: 3, id: 4}, {x: 8, y: 3, id: 3}, {x: 8, y: 3, id: 4},
     {x: 9, y: 2, id: 3},
-
     // Snake
-    {x: 8, y: 4, id: 1},
-    {x: 9, y: 4, id: 2},
-    {x: 9, y: 5, id: 4},
-    {x: 9, y: 5, id: 5},
-    {x: 9, y: 5, id: 0},
-    {x: 9, y: 5, id: 1},
-    {x: 9, y: 6, id: 3},
-    {x: 9, y: 6, id: 2},
-    {x: 9, y: 7, id: 3},
-    {x: 9, y: 7, id: 2},
-    {x: 9, y: 7, id: 1},
-    {x: 10, y: 8, id: 2},
-    {x: 10, y: 8, id: 1},
-    {x: 11, y: 8, id: 2},
-    {x: 11, y: 8, id: 1},
-    {x: 12, y: 9, id: 2},
-    {x: 12, y: 9, id: 1},
-    {x: 12, y: 9, id: 0},
-    {x: 12, y: 9, id: 5},
-    {x: 13, y: 8, id: 3},
+    {x: 8, y: 4, id: 1}, {x: 9, y: 4, id: 2}, {x: 9, y: 5, id: 4}, {x: 9, y: 5, id: 5}, {x: 9, y: 5, id: 0},
+    {x: 9, y: 5, id: 1}, {x: 9, y: 6, id: 3}, {x: 9, y: 6, id: 2}, {x: 9, y: 7, id: 3}, {x: 9, y: 7, id: 2},
+    {x: 9, y: 7, id: 1}, {x: 10, y: 8, id: 2}, {x: 10, y: 8, id: 1}, {x: 11, y: 8, id: 2}, {x: 11, y: 8, id: 1},
+    {x: 12, y: 9, id: 2}, {x: 12, y: 9, id: 1}, {x: 12, y: 9, id: 0}, {x: 12, y: 9, id: 5}, {x: 13, y: 8, id: 3},
     {x: 13, y: 8, id: 4},
-    
+    // Sacramento
+    {x: 3, y: 12, id: 1}, {x: 3, y: 12, id: 0}, {x: 3, y: 12, id: 5}, {x: 3, y: 11, id: 0}, {x: 3, y: 11, id: 5},
+    {x: 3, y: 10, id: 0}, {x: 3, y: 10, id: 5}, {x: 4, y: 10, id: 3}, {x: 4, y: 10, id: 4},
+    // San Joquin
+    { x: 4, y: 13, id: 2}, { x: 4, y: 14, id: 4}, { x: 4, y: 14, id: 5}, { x: 4, y: 14, id: 0}, { x: 5, y: 14, id: 2}, 
+    { x: 5, y: 14, id: 1}, { x: 5, y: 14, id: 0},
+    // Colorado
+    {x: 9, y: 18, id: 0}, {x: 9, y: 18, id: 5}, {x: 9, y: 17, id: 0}, {x: 9, y: 17, id: 5}, {x: 9, y: 16, id: 0}, 
+    {x: 9, y: 16, id: 5}, {x: 10, y: 16, id: 3}, {x: 10, y: 16, id: 4}, {x: 10, y: 16, id: 5}, {x: 11, y: 15, id: 1},
+    {x: 11, y: 15, id: 0}, {x: 12, y: 15, id: 1}, {x: 12, y: 15, id: 0}, {x: 13, y: 14, id: 1}, {x: 13, y: 14, id: 0},
+    {x: 14, y: 14, id: 2}, {x: 14, y: 14, id: 3}, {x: 14, y: 14, id: 4}, {x: 15, y: 13, id: 3}, {x: 15, y: 13, id: 4},
+    {x: 16, y: 13, id: 3}, {x: 16, y: 13, id: 4}, {x: 17, y: 12, id: 3}, {x: 17, y: 12, id: 4},
+    // Green
+    {x: 15, y: 12, id: 2}, {x: 15, y: 12, id: 3}, {x: 15, y: 12, id: 4}, {x: 15, y: 11, id: 0}, {x: 15, y: 11, id: 5},
+    {x: 15, y: 11, id: 4}, {x: 15, y: 10, id: 2}, {x: 15, y: 10, id: 3}, {x: 15, y: 9, id: 2},
+    // ??? joining Colorado
+    {x: 10, y: 15, id: 0}, {x: 11, y: 14, id: 0}, {x: 11, y: 14, id: 1}, {x: 12, y: 14, id: 0}, {x: 12, y: 14, id: 1},
+    {x: 12, y: 14, id: 5}, {x: 12, y: 13, id: 0}, {x: 12, y: 13, id: 3}, {x: 12, y: 13, id: 4}, {x: 12, y: 13, id: 5},
+    // ??? joining Colorado
+    {x: 14, y: 15, id: 4}, {x: 14, y: 15, id: 5}, {x: 15, y: 15, id: 4}, {x: 15, y: 15, id: 5}, {x: 16, y: 16, id: 4}, 
+    {x: 16, y: 16, id: 5},
+    // Gila
+    {x: 10, y: 19, id: 0}, {x: 11, y: 18, id: 1}, {x: 11, y: 18, id: 0}, {x: 12, y: 18, id: 1}, {x: 13, y: 18, id: 2},
+    {x: 13, y: 18, id: 1}, {x: 13, y: 18, id: 0}, {x: 14, y: 18, id: 1},
      ],
 
-  getGridBackground: function(hexCoordinates) {
+  getBackground: function(hexCoordinates) {
     switch(this.terrain[hexCoordinates.x][hexCoordinates.y]) {
       case "o": return { opacity: 1, color: 'deepskyblue' }; break;
       case "m": return { opacity: 1, color: 'sienna' }; break;

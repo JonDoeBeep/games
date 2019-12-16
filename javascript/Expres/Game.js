@@ -1,14 +1,16 @@
 window.onload = function() {
   gridParent = document.getElementById("grid");
-  gridParent.style.marginTop = "0px";
-  gridParent.style.marginLeft = "0px";
 
-  grid.initializeDrawing();
-  gridHex.initializeHex(30);
+  // initialize hex for grid factory method
+  hex.initializeHex(30);
+
+  // initialize grid
+  grid.drawing = SVG(gridParent);
   grid.initializeGrid();
-  grid.initializeRivers();
-  gridClickDrag.initializeGridDrag(gridParent);
-  gridZoom.initializeGridZoom(gridParent);  
+
+  // initialize event listeners
+  mouseEvent.initializeDrag(gridParent);
+  mouseEvent.initializeZoom(gridParent);  
 }
 
 const game = {
