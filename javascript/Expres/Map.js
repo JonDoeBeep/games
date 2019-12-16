@@ -89,15 +89,5 @@ const map = {
     {x: 16, y: 16, id: 5},
     // Gila
     {x: 10, y: 19, id: 0}, {x: 11, y: 18, id: 1}, {x: 11, y: 18, id: 0}, {x: 12, y: 18, id: 1}, {x: 13, y: 18, id: 2},
-    {x: 13, y: 18, id: 1}, {x: 13, y: 18, id: 0}, {x: 14, y: 18, id: 1},
-     ],
-
-  getBackground: function(hexCoordinates) {
-    switch(this.terrain[hexCoordinates.x][hexCoordinates.y]) {
-      case "o": return { opacity: 1, color: 'deepskyblue' }; break;
-      case "m": return { opacity: 1, color: 'sienna' }; break;
-      case "x": return { opacity: 1, color: 'black' }; break;
-      default:  return { opacity: 1, color: 'lightgreen' };
-    } 
-  }
+    {x: 13, y: 18, id: 1}, {x: 13, y: 18, id: 0}, {x: 14, y: 18, id: 1}]
 }

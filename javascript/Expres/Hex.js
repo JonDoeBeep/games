@@ -11,7 +11,7 @@ const hex = {
       render(draw) {
         const { x, y } = this.toPoint()
         const corners = this.corners()
-        this.background_color = map.getBackground(this);
+        this.background_color = hex.getBackground(this);
         this.draw = grid.drawing
           .polygon(corners.map(({ x, y }) => `${x},${y}`))
           .stroke({ width: Math.min(Math.floor(hexSize / 20), 1), color: '#ccc'})
@@ -38,5 +38,13 @@ const hex = {
         }
       }
     })
+  },
+  getBackground: function(hexCoordinates) {
+    switch(map.terrain[hexCoordinates.x][hexCoordinates.y]) {
+      case "o": return { opacity: 1, color: 'deepskyblue' }; break;
+      case "m": return { opacity: 1, color: 'sienna' }; break;
+      case "x": return { opacity: 1, color: 'black' }; break;
+      default:  return { opacity: 1, color: 'lightgreen' };
+    } 
   }
 }
