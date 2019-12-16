@@ -4,15 +4,6 @@ const mouseEvent = {
     // how many pixels difference is a click, not a drag
     const dragSensitivity = 8;
 
-    // max / min values for area accessible by dragging
-    const bottomRightCoords = grid.instance.get([map.terrain.length - 1, map.terrain[0].length - 1]).toPoint();
-    const minX = -30 - bottomRightCoords.x + elmnt.parentElement.clientWidth;
-    const minY = -30 - bottomRightCoords.y + elmnt.parentElement.clientHeight;
-    const maxX = -30;
-    const maxY = -30;
-    elmnt.style.marginTop = maxY + "px";
-    elmnt.style.marginLeft = maxX + "px";
-
     var posX = 0, posY = 0, deltaX = 0, deltaY = 0, totalX = 0; totalY = 0;
     elmnt.onmousedown = dragMouseDown;
 
@@ -79,11 +70,14 @@ const mouseEvent = {
       e = e || window.event;
       e.preventDefault();
       if (hex.size + e.deltaY > 0) {
-        hex.initializeHex(hex.size + e.deltaY);
+        hex.initializeHex(hex.size + e.deltaY / 2);
       }
+
+      // redraw grid, reinitialize mouse event(s)
       document.getElementById('grid').innerHTML = "";
       grid.drawing = SVG(gridParent);
       grid.initializeGrid();
+      mouseEvent.initializeDrag(gridParent);
     }
   }
 }

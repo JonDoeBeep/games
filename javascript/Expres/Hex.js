@@ -14,7 +14,7 @@ const hex = {
         this.background_color = map.getBackground(this);
         this.draw = grid.drawing
           .polygon(corners.map(({ x, y }) => `${x},${y}`))
-          .stroke({ width: 1, color: '#999' })
+          .stroke({ width: 1, color: '#ccc'})
           .translate(x, y)
           .fill(this.background_color)
       },
