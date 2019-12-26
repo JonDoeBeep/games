@@ -22,6 +22,9 @@ const grid = {
     // rivers
     map.riverSegments.forEach(this.drawRiverSegment);
 
+    // cities
+    map.cities.forEach(this.drawCity);
+
     // grid margins, svg margins
     const bottomRightCoords = grid.instance.get([map.terrain.length - 1, map.terrain[0].length - 1]).toPoint();
     minX = -hex.size - bottomRightCoords.x + gridParent.parentElement.clientWidth;
@@ -49,6 +52,16 @@ const grid = {
     aLine.setAttribute('stroke-linecap', 'round')
     aLine.setAttribute('stroke-width', hex.size / 4);
     grid.drawing.node.appendChild(aLine);
-   
+  },
+
+  drawCity:function(city) {
+    hexCoords = grid.instance.get([city.x, city.y]).toPoint();
+    var aText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    aText.setAttribute('x',hexCoords.x + hex.size / 2);
+    aText.setAttribute('y',hexCoords.y + hex.size);
+    aText.setAttribute('fill','black');
+    aText.setAttribute('font-size',hex.size + 'px');
+    aText.innerHTML = '&#127961;';
+    grid.drawing.node.appendChild(aText);
   }
 }

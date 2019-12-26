@@ -223,5 +223,9 @@ const map = {
     // Connecticut
     {x: 47, y:  1, id: 2}, {x: 47, y:  2, id: 3}, {x: 47, y:  2, id: 2}, {x: 47, y:  3, id: 3}, {x: 47, y:  3, id: 2}, 
     {x: 47, y:  4, id: 3}, {x: 47, y:  4, id: 2}, {x: 47, y:  5, id: 3}, {x: 47, y:  5, id: 2}, 
+  ],
+
+  cities: [
+    {x: 5, y: 3, name: "Seattle"}, {x: 5, y: 5, name: "Portland"},
   ]
 }
