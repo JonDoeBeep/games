@@ -56,12 +56,21 @@ const grid = {
 
   drawCity:function(city) {
     hexCoords = grid.instance.get([city.x, city.y]).toPoint();
-    var aText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    aText.setAttribute('x',hexCoords.x + hex.size / 2);
-    aText.setAttribute('y',hexCoords.y + hex.size);
-    aText.setAttribute('fill','black');
-    aText.setAttribute('font-size',hex.size + 'px');
-    aText.innerHTML = '&#127961;';
-    grid.drawing.node.appendChild(aText);
+
+    var aCityIcon = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    aCityIcon.setAttribute('x',hexCoords.x + hex.size / 2);
+    aCityIcon.setAttribute('y',hexCoords.y + hex.size);
+    aCityIcon.setAttribute('fill','black');
+    aCityIcon.setAttribute('font-size',hex.size + 'px');
+    aCityIcon.innerHTML = '&#127961;';
+    grid.drawing.node.appendChild(aCityIcon);
+
+    var aCityName = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    aCityName.setAttribute('x',hexCoords.x + hex.size * 4 / 3 - city.name.length * hex.size / 9);
+    aCityName.setAttribute('y',hexCoords.y + hex.size / 6);
+    aCityName.setAttribute('fill','black');
+    aCityName.setAttribute('font-size', (hex.size / 3) + 'px');
+    aCityName.innerHTML = city.name;
+    grid.drawing.node.appendChild(aCityName);
   }
 }
